@@ -19,6 +19,26 @@ Playwright covers a compact Sauce Demo flow with TypeScript-based specs, fixture
 - Docker
 - GitHub Actions
 
+### Test Structure
+
+The Playwright suite is organized to keep test intent separate from UI interaction details:
+
+- `tests/specs/`: end-to-end scenarios such as login and cart checkout.
+- `tests/page-objects/`: page models that wrap UI locators and page-level actions.
+- `tests/actions/`: reusable business actions such as login flows.
+- `tests/fixtures/`: shared Playwright fixtures and test setup.
+- `tests/test-data/`: static users, products, and constants used by the specs.
+
+
+### Design Decisions
+
+- Page objects isolate selectors and page behavior, so UI changes do not force spec rewrites.
+- Reusable actions, such as login, consistent across tests.
+- Fixtures centralize setup and reduce repeated boilerplate in specs.
+- Static test data makes scenarios predictable.
+- Docker support keeps execution closer to CI and reduces local environment drift.
+- expect() are not abstracted for easier tracing of which test failed.
+
 ### Running (docker)
 
 From the repository root:
