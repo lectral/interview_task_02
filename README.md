@@ -5,6 +5,7 @@
 1. [End-To-End Tests (Playwright)](#end-to-end-tests-playwright)
 2. [Performance Testing (k6)](#performance-testing-k6)
 3. [Performance Report](#performance-report)
+4. [Reflection & Seniority Check](#reflection--seniority-check)
 
 ## End-To-End Tests (Playwright)
 
@@ -138,3 +139,45 @@ Due to rate limiting it is not a clean measurement of application performance un
 - Add thresholds for `429` rates explicitly so rate limiting fails the scenario with a clearer signal.
 - Capture separate metrics for `200`, `429`, and transport errors to make report interpretation faster.
 - Warm up the target before the measured interval if you want more stable tail-latency numbers.
+
+## Reflection & Seniority Check
+
+### How would you integrate Playwright tests into CI/CD?
+
+- Run smoke tests (subset of tests with proper smoke tag) on every pull request and full regression on merge to pre-release/staging branch.
+- Keep execution deterministic: fixed test data, stable environments, retries only for known flaky issues.
+- Publish Playwright HTML reports, traces, videos, and screenshots as pipeline artifacts.
+- Fail the pipeline on critical path failures and quarantine unstable tests with clear ownership and expiry.
+
+### How would you notify the team about failures or regressions?
+
+- Send automatic Slack or Teams alerts for failed main-branch runs and performance threshold breaches.
+- Include only actionable data: failed spec, environment, commit, owner, and link to the report/trace.
+- Escalate repeated failures or regressions, not every flaky retry, to avoid alert fatigue.
+
+### What observability metrics would you include in an end-to-end quality dashboard?
+
+- Pass rate, flaky rate, and top failing tests.
+- Mean time to detect and mean time to fix test failures.
+- Suite duration, queue time, and environment stability.
+- Defect leakage: escaped bugs vs bugs caught by automation.
+- Reason for failures: Tests/Environment/Application.
+- Performance trends: p50/p95 response time, error rate, throughput, and rate-limit or timeout counts.
+
+### How would you decide what to automate?
+
+- Automate high-value, repeatable, business-critical flows with stable expected behavior.
+- Prioritize tests that reduce release risk: login, checkout, payments, permissions, core integrations.
+- Prefer API or component coverage first, then keep UI E2E focused and lean.
+
+### What would you not automate?
+
+- Low-risk one-off checks, fast-changing UI details, and cases with weak oracle value.
+- Scenarios that are cheaper to verify manually than to maintain in automation.
+- Anything blocked by unstable environments or missing controllable test data until that gap is fixed.
+
+### What belongs to performance vs functional testing?
+
+- Functional testing answers: does it work correctly?
+- Performance testing answers: does it stay fast, stable, and scalable under load?
+- If the assertion is business behavior, it is functional. If the assertion is latency, throughput, resource usage, or degradation under concurrency, it is performance.
