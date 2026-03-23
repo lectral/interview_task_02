@@ -1,0 +1,17 @@
+{
+  "name": "bee_talents",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Simple Playwright + TypeScript test setup with Docker wrapper",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:docker": "./scripts/playwright-docker.sh",
+    "test:docker:ui": "./scripts/playwright-docker.sh --ui --ui-host=0.0.0.0 --ui-port=9323"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "typescript": "5.8.3",
+    "@types/node": "22.14.1"
+  }
+}
