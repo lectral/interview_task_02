@@ -5,6 +5,9 @@ name: Playwright Tests
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -12,10 +15,10 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
@@ -26,25 +29,38 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Prepare artifact directories
+        run: mkdir -p .artifacts/blob-report .artifacts/playwright-report .artifacts/test-results
+
       - name: Run Playwright tests
         run: npm test
         env:
           CI: true
 
+      - name: Generate Playwright HTML report
+        if: always() && hashFiles('.artifacts/blob-report/*.zip') != ''
+        run: npx playwright merge-reports --reporter=html .artifacts/blob-report
+        env:
+          PLAYWRIGHT_HTML_OPEN: never
+          PLAYWRIGHT_HTML_OUTPUT_DIR: .artifacts/playwright-report
+
+
       - name: Upload HTML report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: playwright-report
           path: .artifacts/playwright-report
-          if-no-files-found: warn
+          if-no-files-found: error
+          include-hidden-files: true
           retention-days: 14
 
-      - name: Upload failure artifacts
+      - name: Upload Playwright test artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: playwright-test-results
           path: .artifacts/test-results
-          if-no-files-found: warn
+          if-no-files-found: ignore
+          include-hidden-files: true
           retention-days: 14

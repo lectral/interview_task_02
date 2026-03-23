@@ -4,7 +4,7 @@ import { SAUCE_DEMO_BASE_URL } from './tests/test-data/saucedemo.constants';
 
 const headedInDocker = process.env.PW_HEADED === '1';
 const reporter = process.env.CI
-  ? [['github'], ['html', { open: 'never', outputFolder: '.artifacts/playwright-report' }], ['list']]
+  ? [['github'], ['blob', { outputDir: '.artifacts/blob-report' }], ['list']]
   : [['html', { open: 'never', outputFolder: '.artifacts/playwright-report' }], ['list']];
 
 export default defineConfig({
