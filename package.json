@@ -4,14 +4,27 @@
   "private": true,
   "description": "Simple Playwright + TypeScript test setup with Docker wrapper",
   "scripts": {
+    "prepare": "husky",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "npm run lint -- --fix",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:docker": "./scripts/playwright-docker.sh",
     "test:docker:ui": "./scripts/playwright-docker.sh --ui --ui-host=0.0.0.0 --ui-port=9323"
   },
+  "lint-staged": {
+    "*.{ts,cts,mts}": "eslint --max-warnings=0 --fix"
+  },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "1.58.2",
+    "@types/node": "22.14.1",
+    "eslint": "^10.1.0",
+    "eslint-plugin-playwright": "^2.10.1",
+    "globals": "^17.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "typescript": "5.8.3",
-    "@types/node": "22.14.1"
+    "typescript-eslint": "^8.57.1"
   }
 }

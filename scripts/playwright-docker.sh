@@ -3,11 +3,16 @@ set -euo pipefail
 
 IMAGE_NAME="bee-talents-playwright"
 NODE_MODULES_VOLUME="bee-talents-playwright-node-modules"
-PLAYWRIGHT_CACHE_VOLUME="bee-talents-playwright-cache"
 NPM_CACHE_VOLUME="bee-talents-playwright-npm-cache"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+PLAYWRIGHT_VERSION="$({ 
+  cd "${PROJECT_ROOT}"
+  node -p "const pkg = require('./package.json'); const version = pkg.devDependencies?.['@playwright/test'] ?? pkg.dependencies?.['@playwright/test']; if (!version) { process.exit(1); } version.replace(/^[^0-9]*/, '').replace(/[^a-zA-Z0-9_.-]/g, '-');"
+} )"
+PLAYWRIGHT_CACHE_VOLUME="bee-talents-playwright-cache-${PLAYWRIGHT_VERSION}"
 
 DOCKER_TTY_ARGS=()
 if [ -t 0 ] && [ -t 1 ]; then
