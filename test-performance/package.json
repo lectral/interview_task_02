@@ -1,0 +1,11 @@
+{
+  "name": "bee-talents-performance-tests",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Standalone k6 performance test project for ReqRes API",
+  "scripts": {
+    "test": "./run-k6.sh run users-page.js",
+    "test:docker": "./run-k6.sh run users-page.js",
+    "report": "node render-report.mjs"
+  }
+}

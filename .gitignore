@@ -3,3 +3,4 @@ playwright-report
 test-results
 .artifacts
 .husky/_
+test-performance/results/summary.json
